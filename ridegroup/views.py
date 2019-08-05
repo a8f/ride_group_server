@@ -1,7 +1,21 @@
 from django.shortcuts import render
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from rest_auth.registration.views import SocialLoginView
+from django.http import HttpResponse, JsonResponse
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from ridegroup.authentication import FirebaseAuthentication
+from .models import *
 
 
-class GoogleLogin(SocialLoginView):
-    adapter_class = GoogleOAuth2Adapter
+@api_view(['GET'])
+def connection_test(request):
+    print(request.headers)
+    print(request.user)
+    return HttpResponse('pong')
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def login(request):
+    return JsonResponse(RidegroupUser.objects.get(id=request.user.id).complete_profile())

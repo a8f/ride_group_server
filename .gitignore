@@ -1,6 +1,7 @@
 firebase.json
 .idea/
 __pycache__/
+ridegroup/migrations/
 
 
 # Created by https://www.gitignore.io/api/python

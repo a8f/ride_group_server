@@ -1,3 +1,5 @@
 django
-django-rest-framework
+djangorestframework
+firebase-admin
+drf-firebase-authentication
 psycopg2

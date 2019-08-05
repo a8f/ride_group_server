@@ -15,11 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from ridegroup.views import *
+from ridegroup import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('rest-auth/', include('rest_auth.urls')),
-    path('rest-auth/registration/', include('rest_auth.registration.urls')),
-    path('rest-auth/google/', GoogleLogin.as_view(), name='google_login')
+    path('ping/', views.connection_test, name='check_connection'),
+    path('login/', views.login, name='auth_user')
 ]
