@@ -20,5 +20,6 @@ from ridegroup import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ping/', views.connection_test, name='check_connection'),
-    path('login/', views.login, name='auth_user')
+    path('login/', views.login, name='auth_user'),
+    path('register/', views.register, name='register')
 ]

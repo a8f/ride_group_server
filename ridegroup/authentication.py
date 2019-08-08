@@ -16,8 +16,9 @@ class FirebaseAuthentication(BaseFirebaseAuthentication):
         try:
             return get_user_model().objects.get(firebase_uid=firebase_user_record.uid)
         except get_user_model().DoesNotExist:
+            filtered_username = firebase_user_record.display_name.replace(r'\w', '')
             return get_user_model().objects.create(firebase_uid=firebase_user_record.uid,
-                                                   username=firebase_user_record.display_name,
+                                                   username=filtered_username,
                                                    email=firebase_user_record.email,
                                                    phone=firebase_user_record.phone_number,
                                                    email_verified=firebase_user_record.email_verified,
