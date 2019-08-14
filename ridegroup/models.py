@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class RidegroupUser(AbstractUser):
@@ -12,3 +13,40 @@ class RidegroupUser(AbstractUser):
     email_verified = models.BooleanField(default=False, null=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['id', 'firebase_uid']
+
+
+class Ride(models.Model):
+    owner = models.ForeignKey('RidegroupUser', on_delete=models.CASCADE, null=False)
+    created_date = models.DateTimeField(default=timezone.now, null=False, blank=True)
+    start_loc = models.CharField(max_length=128, null=False)
+    start_long = models.FloatField(null=False)
+    start_lat = models.FloatField(null=False)
+    end_loc = models.CharField(max_length=128, null=False)
+    end_long = models.FloatField(null=False)
+    end_lat = models.FloatField(null=False)
+    vehicle = models.ForeignKey('Vehicle', on_delete=models.CASCADE, null=False)
+    time = models.DateTimeField(null=False)
+    title = models.CharField(max_length=32)
+    description = models.CharField(max_length=999)
+
+    def passengers(self):
+        return Passenger.objects.filter(ride=self).all()
+
+
+class Passenger(models.Model):
+    ride = models.ForeignKey('Ride', on_delete=models.CASCADE, null=False, blank=False)
+    user = models.ForeignKey('RidegroupUser', on_delete=models.CASCADE)
+    seat = models.SmallIntegerField(null=False)
+
+
+class Vehicle(models.Model):
+    name = models.CharField(max_length=32, null=False)
+    make = models.CharField(max_length=32, null=False)
+    model = models.CharField(max_length=32, null=False)
+    seats = models.PositiveSmallIntegerField(default=4, null=False)
+    doors = models.PositiveSmallIntegerField(default=4, null=False)
+    color = models.CharField(max_length=32, null=False)
+    plate = models.CharField(max_length=16, null=False, unique=True)
+    verified = models.BooleanField(default=False, null=False)
+    year = models.SmallIntegerField(default=None, null=True)
+    user = models.ForeignKey('RidegroupUser', on_delete=models.CASCADE, null=False)

@@ -21,5 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('ping/', views.connection_test, name='check_connection'),
     path('login/', views.login, name='auth_user'),
-    path('register/', views.register, name='register')
+    path('register/', views.register, name='register'),
+    path('create_ride/', views.create_ride, name='create_ride'),
+    path('my_vehicles/', views.my_vehicles, name='my_vehicles'),
+    path('create_vehicle/', views.create_vehicle, name='create_vehicle')
 ]

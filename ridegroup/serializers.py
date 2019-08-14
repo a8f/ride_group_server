@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ridegroup.models import RidegroupUser
+from ridegroup.models import *
 
 
 class BaseUserSerializer(serializers.ModelSerializer):
@@ -33,3 +33,26 @@ class MyUserSerializer(serializers.ModelSerializer):
         model = RidegroupUser
         fields = ['id', 'setup_complete', 'username', 'first_name', 'date_joined', 'photo_url', 'last_name', 'email',
                   'phone', 'last_login']
+
+
+class VehicleSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Vehicle
+    """
+
+    def create(self, validated_data):
+        return Vehicle.objects.create(**validated_data)
+
+    class Meta:
+        model = Vehicle
+        fields = ['id', 'name', 'make', 'model', 'year', 'seats', 'doors', 'color', 'plate', 'user']
+
+
+class RideSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        return Ride.objects.create(**validated_data)
+
+    class Meta:
+        model = Ride
+        fields = ['owner', 'start_loc', 'start_long', 'start_lat', 'end_loc', 'end_long', 'end_lat', 'time', 'vehicle']
