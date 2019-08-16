@@ -24,5 +24,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('create_ride/', views.create_ride, name='create_ride'),
     path('my_vehicles/', views.my_vehicles, name='my_vehicles'),
-    path('create_vehicle/', views.create_vehicle, name='create_vehicle')
+    path('create_vehicle/', views.create_vehicle, name='create_vehicle'),
+    path('my_rides/', views.my_rides, name='my_rides')
 ]

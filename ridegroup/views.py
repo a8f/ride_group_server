@@ -87,3 +87,13 @@ def create_vehicle(request):
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     new = serializer.save()
     return HttpResponse(new.id)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def my_rides(request):
+    rides = list(Ride.objects.filter(owner=RidegroupUser.objects.get(id=request.user.id)).all())
+    if rides is None:
+        return JsonResponse('', safe=False)
+    serializer = MyRidesSerializer(rides, many=len(rides) > 1)
+    return JsonResponse(serializer.data, safe=False)

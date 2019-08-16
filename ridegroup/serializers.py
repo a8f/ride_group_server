@@ -49,10 +49,28 @@ class VehicleSerializer(serializers.ModelSerializer):
 
 
 class RideSerializer(serializers.ModelSerializer):
+    passengers = BaseUserSerializer(many=True, read_only=True)
+    owner = BaseUserSerializer(many=False, read_only=True)
+    vehicle = VehicleSerializer(many=False, read_only=True)
 
     def create(self, validated_data):
         return Ride.objects.create(**validated_data)
 
     class Meta:
         model = Ride
-        fields = ['owner', 'start_loc', 'start_long', 'start_lat', 'end_loc', 'end_long', 'end_lat', 'time', 'vehicle']
+        fields = ['owner', 'start_loc', 'start_long', 'start_lat', 'end_loc', 'end_long', 'end_lat', 'time', 'vehicle',
+                  'passengers', 'id']
+
+
+class MyRidesSerializer(serializers.ModelSerializer):
+    passengers = BaseUserSerializer(many=True, read_only=True)
+    owner = BaseUserSerializer(many=False, read_only=True)
+    vehicle = VehicleSerializer(many=False, read_only=True)
+
+    def create(self, validated_data):
+        return Ride.objects.create(**validated_data)
+
+    class Meta:
+        model = Ride
+        fields = ['owner', 'start_loc', 'start_long', 'start_lat', 'end_loc', 'end_long', 'end_lat', 'time', 'vehicle',
+                  'passengers', 'id', 'title', 'description']

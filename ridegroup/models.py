@@ -34,7 +34,7 @@ class Ride(models.Model):
 
 
 class Passenger(models.Model):
-    ride = models.ForeignKey('Ride', on_delete=models.CASCADE, null=False, blank=False)
+    ride = models.ForeignKey('Ride', on_delete=models.CASCADE, null=False, blank=False, related_name='passengers')
     user = models.ForeignKey('RidegroupUser', on_delete=models.CASCADE)
     seat = models.SmallIntegerField(null=False)
 
