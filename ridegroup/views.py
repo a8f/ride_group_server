@@ -93,7 +93,7 @@ def create_vehicle(request):
 @permission_classes([IsAuthenticated])
 def my_rides(request):
     rides = list(Ride.objects.filter(owner=RidegroupUser.objects.get(id=request.user.id)).all())
-    if rides is None:
+    if rides is None or len(rides) == 0:
         return JsonResponse('', safe=False)
     serializer = MyRidesSerializer(rides, many=len(rides) > 1)
     return JsonResponse(serializer.data, safe=False)
