@@ -1,5 +1,6 @@
 django
 djangorestframework
+django-extra-field
 firebase-admin
 drf-firebase-authentication
 psycopg2

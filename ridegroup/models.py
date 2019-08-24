@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.gis.db import models
 from django.utils import timezone
 
 
@@ -11,6 +11,10 @@ class RidegroupUser(AbstractUser):
     phone = models.CharField(max_length=16, null=True, blank=True)
     photo_url = models.CharField(max_length=255, null=True, blank=True)
     email_verified = models.BooleanField(default=False, null=False)
+    rides_driver = models.PositiveIntegerField(default=0, null=False)
+    rides_passenger = models.PositiveIntegerField(default=0, null=False)
+    rating_driver = models.FloatField(default=-1, null=False)
+    rating_passenger = models.FloatField(default=-1, null=False)
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['id', 'firebase_uid']
 
@@ -18,12 +22,10 @@ class RidegroupUser(AbstractUser):
 class Ride(models.Model):
     owner = models.ForeignKey('RidegroupUser', on_delete=models.CASCADE, null=False)
     created_date = models.DateTimeField(default=timezone.now, null=False, blank=True)
-    start_loc = models.CharField(max_length=128, null=False)
-    start_long = models.FloatField(null=False)
-    start_lat = models.FloatField(null=False)
-    end_loc = models.CharField(max_length=128, null=False)
-    end_long = models.FloatField(null=False)
-    end_lat = models.FloatField(null=False)
+    start_loc_name = models.CharField(max_length=128, null=False)
+    start_loc = models.PointField(null=False)
+    end_loc_name = models.CharField(max_length=128, null=False)
+    end_loc = models.PointField(null=False)
     vehicle = models.ForeignKey('Vehicle', on_delete=models.CASCADE, null=False)
     time = models.DateTimeField(null=False)
     title = models.CharField(max_length=32)

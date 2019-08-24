@@ -1,3 +1,4 @@
+from drf_extra_fields.geo_fields import PointField
 from rest_framework import serializers
 
 from ridegroup.models import *
@@ -20,7 +21,8 @@ class RelatedUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RidegroupUser
-        fields = ['id', 'username', 'first_name', 'date_joined', 'photo_url', 'last_name']
+        fields = ['id', 'username', 'first_name', 'date_joined', 'photo_url', 'last_name', 'rides_driver',
+                  'rides_passenger', 'rating_driver', 'rating_passenger']
 
 
 class MyUserSerializer(serializers.ModelSerializer):
@@ -32,7 +34,7 @@ class MyUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = RidegroupUser
         fields = ['id', 'setup_complete', 'username', 'first_name', 'date_joined', 'photo_url', 'last_name', 'email',
-                  'phone', 'last_login']
+                  'phone', 'last_login', 'rides_driver', 'rides_passenger', 'rating_driver', 'rating_passenger']
 
 
 class VehicleSerializer(serializers.ModelSerializer):
@@ -48,29 +50,34 @@ class VehicleSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'make', 'model', 'year', 'seats', 'doors', 'color', 'plate', 'user']
 
 
+class MyRideSerializer(serializers.ModelSerializer):
+    """
+    Serializer for authenticated user's own rides
+    """
+    passengers = BaseUserSerializer(many=True, read_only=True)
+    start_loc = PointField(required=True)
+    end_loc = PointField(required=True)
+
+    def create(self, validated_data):
+        return Ride.objects.create(**validated_data)
+
+    class Meta:
+        model = Ride
+        fields = ['owner', 'start_loc_name', 'end_loc_name', 'start_loc', 'end_loc', 'time', 'vehicle',
+                  'passengers', 'id', 'title', 'description']
+
+
 class RideSerializer(serializers.ModelSerializer):
+    """
+    Serializer for public rides
+    """
     passengers = BaseUserSerializer(many=True, read_only=True)
     owner = BaseUserSerializer(many=False, read_only=True)
     vehicle = VehicleSerializer(many=False, read_only=True)
-
-    def create(self, validated_data):
-        return Ride.objects.create(**validated_data)
-
-    class Meta:
-        model = Ride
-        fields = ['owner', 'start_loc', 'start_long', 'start_lat', 'end_loc', 'end_long', 'end_lat', 'time', 'vehicle',
-                  'passengers', 'id']
-
-
-class MyRidesSerializer(serializers.ModelSerializer):
-    passengers = BaseUserSerializer(many=True, read_only=True)
-    owner = BaseUserSerializer(many=False, read_only=True)
-    vehicle = VehicleSerializer(many=False, read_only=True)
-
-    def create(self, validated_data):
-        return Ride.objects.create(**validated_data)
+    start_loc = PointField(required=True)
+    end_loc = PointField(required=True)
 
     class Meta:
         model = Ride
-        fields = ['owner', 'start_loc', 'start_long', 'start_lat', 'end_loc', 'end_long', 'end_lat', 'time', 'vehicle',
+        fields = ['owner', 'start_loc_name', 'end_loc_name', 'start_loc', 'end_loc', 'time', 'vehicle',
                   'passengers', 'id', 'title', 'description']

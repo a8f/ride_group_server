@@ -14,7 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+
 from ridegroup import views
 
 urlpatterns = [
@@ -25,5 +26,6 @@ urlpatterns = [
     path('create_ride/', views.create_ride, name='create_ride'),
     path('my_vehicles/', views.my_vehicles, name='my_vehicles'),
     path('create_vehicle/', views.create_vehicle, name='create_vehicle'),
-    path('my_rides/', views.my_rides, name='my_rides')
+    path('my_rides/', views.my_rides, name='my_rides'),
+    path('ride_search/', views.ride_search, name='ride_search')
 ]

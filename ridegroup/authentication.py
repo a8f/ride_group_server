@@ -1,6 +1,6 @@
+from django.contrib.auth import get_user_model
 from drf_firebase.authentication import BaseFirebaseAuthentication
 from firebase_admin import credentials, initialize_app
-from django.contrib.auth import get_user_model
 
 creds = credentials.Certificate('firebase.json')
 app = initialize_app(creds, name='RideGroup')
